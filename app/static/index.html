@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>多图拼接工作台</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header><a class="brand" href="/"><span class="brand-icon">▦</span> STITCH<span class="brand-divider"></span><span class="brand-sub">多图拼接工作台</span></a><span id="connection" class="connection"><i></i> 本地服务连接中</span></header>
+<main>
+  <section class="heading"><div><div class="eyebrow">GES-GSP · CAMERA STITCHING</div><h1>让多个视角，汇成完整画面<span>。</span></h1><p>导入图片文件夹，一键生成原尺寸全景图。</p></div><span class="local-tag">本机处理 · 原尺寸输出</span></section>
+  <div class="workspace">
+    <aside>
+      <section class="card import-card"><div class="section-title"><span class="step">01</span><h2>导入图片</h2><span id="file-count" class="count">0 张</span></div>
+        <input id="folder-input" type="file" webkitdirectory multiple hidden>
+        <button id="choose-folder" class="drop-zone"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M5 14a4 4 0 0 1 4-4h11l5 5h14a4 4 0 0 1 4 4v17a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4Z"/><path d="M24 33V22m-5 5 5-5 5 5"/></svg><strong>选择图片文件夹</strong><span>支持 PNG、JPG、TIFF、WebP 等</span></button>
+        <div id="folder-info" class="folder-info" hidden><strong id="folder-name"></strong><button id="change-folder" class="text-button">重新选择</button></div>
+        <p id="import-hint" class="hint">仅导入文件夹内同一级图片，默认排除 ground_truth.png。</p>
+        <div id="selection-toolbar" class="selection-toolbar" hidden><span>勾选参与拼接的图片</span><button id="toggle-all" class="text-button">全选 / 取消</button></div>
+        <div id="file-list" class="file-list"></div>
+        <div class="preprocess-panel">
+          <label for="preprocess-method">前处理方式</label>
+          <div class="preprocess-controls"><select id="preprocess-method"><option value="none">无前处理 · 使用原图</option><option value="dehaze">去雾 · 暗通道与引导滤波</option><option value="lowlight">暗光增强 · 自然光照增强</option></select><button id="apply-preprocess" class="secondary" disabled>应用</button></div>
+          <p id="preprocess-hint" class="hint" aria-live="polite">选择前处理方式并应用，完成后可预览待拼接图片。</p>
+          <div id="preprocess-preview-tools" hidden><span id="processed-tag" class="processed-tag">已处理</span><button id="show-original" class="text-button">查看原图</button><button id="show-processed" class="text-button">查看处理结果</button></div>
+          <p id="stitch-source" class="hint">当前拼接输入：原图</p>
+        </div>
+      </section>
+      <section class="card options"><div class="section-title"><span class="step">02</span><h2>拼接设置</h2></div>
+        <label for="mode">拼接模式</label><select id="mode"><option value="auto">自动拼接 · 图片有重叠</option><option value="grid">网格排列 · 相邻无重叠裁块</option></select>
+        <p id="mode-hint" class="hint">自动检测重叠区域，并进行 HED / GES-GSP 网格优化。</p>
+        <div id="columns-wrap" hidden><label for="columns">每行图片数量</label><input id="columns" type="number" value="4" min="1" max="100"><p class="hint">按文件名自然顺序，从左到右、从上到下排列。</p></div>
+        <label for="blend">重叠区域处理</label><select id="blend"><option value="sharp">清晰优先 · 保留单路细节</option><option value="feather">平滑优先 · 羽化融合</option></select>
+        <button id="start" class="primary" disabled><span>开始拼接</span><span aria-hidden="true">↗</span></button>
+        <p class="footnote">原始图片不会被覆盖，每次任务单独保存。</p>
+      </section>
+    </aside>
+    <section class="result-column">
+      <section class="card result-card"><div class="result-top"><div class="section-title"><span class="step">03</span><h2>拼接结果</h2></div><span id="status-badge" class="badge">等待导入</span></div>
+        <div class="preview-stage" id="preview-stage"><div id="empty-state" class="empty-state"><div class="panorama-icon"><span></span><span></span><span></span></div><h3>你的完整画面将在这里呈现</h3><p>选择图片文件夹，点击「开始拼接」</p><span class="empty-note">预览自适应显示，下载保留完整分辨率</span></div><img id="result-image" alt="拼接结果预览" hidden><div id="busy-state" class="busy-state" hidden><div class="spinner"></div><h3 id="busy-title">正在上传图片</h3><p id="busy-detail">请保留此页面</p><span>拼接耗时取决于图片数量与分辨率</span></div></div>
+        <div id="result-info" class="result-info" hidden><div><strong id="dimensions"></strong><span id="result-detail"></span></div><a id="download" class="download" download="panorama.png">下载原尺寸 PNG <span>↓</span></a></div>
+      </section>
+      <div id="error-panel" class="error-panel" role="alert" hidden><div class="error-symbol">!</div><div><h3>拼接未完成</h3><p id="error-text"></p><p id="error-advice"></p></div></div>
+      <section class="card progress-card"><div class="progress-title"><div><span id="progress-dot" class="progress-dot"></span><strong id="progress-title">准备就绪</strong></div><span id="progress-label">等待任务</span></div><div class="progress-track"><div id="progress-bar"></div></div><div class="progress-steps"><span id="s1">01 导入图片</span><span id="s2">02 几何计算</span><span id="s3">03 生成全景</span></div><details id="logs-details"><summary>运行日志 <span>查看详细处理信息</span></summary><pre id="logs">任务启动后，处理日志会显示在这里。</pre></details></section>
+      <p class="result-footer">所有图片在本机处理 · GES-GSP 工程实现 · 无需云端上传</p>
+    </section>
+  </div>
+</main>
+<dialog id="image-dialog"><div class="image-dialog-top"><strong id="image-dialog-title"></strong><button id="close-image" class="text-button">关闭 ×</button></div><img id="image-dialog-content" alt="待拼接图片"></dialog>
+<script src="/app.js"></script>
+</body></html>

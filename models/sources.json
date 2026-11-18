@@ -1,0 +1,7 @@
+{
+  "source": "https://github.com/flowerDuo/GES-GSP-Stitching/tree/master/Code/model",
+  "sha256": {
+    "deploy.prototxt": "fe98d416556f0651abf2d4cc9a58aae2ccb68533e07200345980e29ab277b370",
+    "hed_pretrained_bsds.caffemodel": "4b6937684bce9be1ef5163c78ec812dff9a23653bfbb451925210a64ecfaaac7"
+  }
+}
