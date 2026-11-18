@@ -4,8 +4,6 @@
 
 算法参考：Du 等，CVPR 2022，**Geometric Structure Preserving Warp for Natural Image Stitching**：
 
-- [作者项目](https://github.com/flowerDuo/GES-GSP-Stitching)
-- [论文及补充材料](https://openaccess.thecvf.com/content/CVPR2022/html/Du_Geometric_Structure_Preserving_Warp_for_Natural_Image_Stitching_CVPR_2022_paper.html)
 
 这是独立编写的工程复现，实际实现了网格联合优化与 GES 能量，并非给 OpenCV Stitcher 换名字。**不是作者 C++ 版本的逐行移植，也没有完成论文数据集上的等效复现验证。** 下文列出差异，避免把近似实现误认成论文原版。
 
