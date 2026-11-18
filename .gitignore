@@ -6,3 +6,4 @@ models/*.caffemodel
 dist/
 datasets/
 packaging/
+datasets.zip
